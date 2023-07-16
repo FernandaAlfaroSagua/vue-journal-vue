@@ -1,25 +1,71 @@
 <template>
   <div
-    class="entry-container mb-3 pointer p-2"
-    @click="$router.push({ name: 'entry', params: { id: 10 } })">
+    class="entry-container mb-2 pointer p-2"
+    @click="$router.push({ name: 'entry', params: { id: entry.id } })">
     <!-- Titulo -->
     <div class="d-flex entry-title">
-      <span class="text-success fs-5 fw-bold">13</span>
-      <span class="mx-1 fs-5">Julio</span>
-      <span class="mx-2 fw-light">2023, jueves</span>
+      <span class="text-success fs-5 fw-bold">{{ day }}</span>
+      <span class="mx-1 fs-5">{{ month }}</span>
+      <span class="mx-2 fw-light">{{ yearDay }}</span>
     </div>
     <!-- Descripcion -->
     <div class="entry-description">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus nam
-      dignissimos excepturi. Esse pariatur explicabo asperiores! Sint, obcaecati
-      sit! Excepturi reprehenderit perspiciatis veniam minima vitae cumque
-      magnam ipsa aspernatur similique?
+      {{ shortText }}
     </div>
   </div>
 </template>
 
 <script>
-  export default {};
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+  const days = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
+  export default {
+    props: {
+      entry: {
+        type: Object,
+        required: true,
+      },
+    },
+    computed: {
+      shortText() {
+        return this.entry.text.length > 100
+          ? `${this.entry.text.substring(0, 100)}...`
+          : this.entry.text;
+      },
+      day() {
+        const date = new Date(this.entry.date);
+        return date.getDate();
+      },
+      month() {
+        const date = new Date(this.entry.date);
+        return months[date.getMonth()];
+      },
+      yearDay() {
+        const date = new Date(this.entry.date);
+        return `${date.getFullYear()}, ${days[date.getDay()]}`;
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>
